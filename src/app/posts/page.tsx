@@ -1,10 +1,43 @@
+'use client'
 import AnimatedHeader from '@/components/AnimationHeader';
+import Card from '@/components/Card';
+import ErrorBox from '@/components/ErrorBox';
+import Loading from '@/components/Loading';
+import useFetch from '@/hooks/useFetch';
+import { Post } from '@/types/tyoe';
 import React from 'react';
 
 const page = () => {
+
+       
+    const { data, loading, error } = useFetch<Post[]>('https://jsonplaceholder.typicode.com/posts')
+
+    if (loading) {
+        return <Loading />
+    }
+
+    if (error) {
+        return <ErrorBox message={error}></ErrorBox>
+    }
+
+    console.log(data);
     return (
         <div>
             <AnimatedHeader title='Welcome to Posts Page'></AnimatedHeader>
+
+            <div  className='grid grid-cols-3 gap-3 my-6'>
+                {
+                    data.map(post => (
+                        <Card 
+                            key={post.id}
+                            title={post.title}
+                            value={post.id}
+                            description={post.body}
+                            color="blue"
+                            ></Card>
+                    ))
+                }
+            </div>
         </div>
     );
 };
