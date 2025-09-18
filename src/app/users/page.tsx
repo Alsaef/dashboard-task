@@ -8,7 +8,7 @@ import { User } from '@/types/tyoe';
 import React from 'react';
 
 const page = () => {
-     const { data, loading, error } = useFetch<User[]>('https://jsonplaceholder.typicode.com/users')
+     const { data, loading, error } = useFetch<User[]|null>('https://jsonplaceholder.typicode.com/users')
 
     if (loading) {
         return  <div className="min-h-screen flex items-center justify-center">
@@ -19,6 +19,11 @@ const page = () => {
     if (error) {
         return <ErrorBox message={error}></ErrorBox>
     }
+
+    if (!data) {
+  return <ErrorBox message="No users found" />;
+}
+
 
     return (
         <div>

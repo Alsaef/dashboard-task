@@ -1,24 +1,21 @@
-
+'use client';
 
 import React, { useEffect, useState } from 'react';
 
-
-
-interface fetchState <T> {
-    data: T | null;
-    loading:boolean;
-    error:string | null
+interface FetchState<T> {
+  data: T | null;
+  loading: boolean;
+  error: string | null;
 }
 
-const useFetch = <T,>(url:string) => {
-
-    const [state,setState]=useState<fetchState<T>>({
+const useFetch = <T,>(url: string) => {
+  const [state, setState] = useState<FetchState<T>>({
     data: null,
     loading: true,
     error: null,
-  })
+  });
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(url);
@@ -27,16 +24,19 @@ const useFetch = <T,>(url:string) => {
         }
         const json = (await res.json()) as T;
         setState({ data: json, loading: false, error: null });
-      } catch (err: any) {
-        setState({ data: null, loading: false, error: err.message });
+      } catch (err: unknown) {
+        let message = "An unknown error occurred";
+        if (err instanceof Error) {
+          message = err.message;
+        }
+        setState({ data: null, loading: false, error: message });
       }
     };
 
-    fetchData()
+    fetchData();
+  }, [url]); // <-- dependency add করা হলো
 
-  },[])
-
-    return state;
+  return state;
 };
 
 export default useFetch;
