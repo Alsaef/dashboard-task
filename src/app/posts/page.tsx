@@ -10,7 +10,7 @@ import React from 'react';
 const page = () => {
 
 
-    const { data, loading, error } = useFetch<Post[] | null>('https://jsonplaceholder.typicode.com/posts')
+    const { data, loading, error } = useFetch<Post[]>('https://jsonplaceholder.typicode.com/posts')
 
     if (loading) {
         return <div className="min-h-screen flex items-center justify-center">
