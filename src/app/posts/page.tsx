@@ -21,10 +21,10 @@ const page = () => {
     if (error) {
         return <ErrorBox message={error}></ErrorBox>
     }
-
-    if (!data) {
-        return <ErrorBox message="No users found" />;
+    if (!data || data.length === 0) {
+        return <ErrorBox message="No posts found" />;
     }
+
 
     console.log(data);
     return (

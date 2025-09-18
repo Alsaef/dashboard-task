@@ -7,36 +7,36 @@ import useFetch from '@/hooks/useFetch';
 import { User } from '@/types/tyoe';
 import React from 'react';
 
-const page = () => {
-     const { data, loading, error } = useFetch<User[]>('https://jsonplaceholder.typicode.com/users')
+const UsersPage = () => {
+  const { data, loading, error } = useFetch<User[]>('https://jsonplaceholder.typicode.com/users');
 
-    if (loading) {
-        return  <div className="min-h-screen flex items-center justify-center">
-        <Loading></Loading>
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading />
       </div>
-    }
+    );
+  }
 
-    if (error) {
-        return <ErrorBox message={error}></ErrorBox>
-    }
-
-    if (!data) {
-  return <ErrorBox message="No users found" />;
+  if (error) {
+    return <ErrorBox message={error} />;
+  }
+  
+if (!data || data.length === 0) {
+    return <ErrorBox message="No posts found" />;
 }
 
 
-    return (
-        <div>
-             <AnimatedHeader title='Welcome to Users Page'></AnimatedHeader>
-                         <div  className='grid grid-cols-3 gap-3 my-6'>
-                {
-                    data.map(user => (
-                    <UserCard key={user.id} user={user} />
-                    ))
-                }
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <AnimatedHeader title="Welcome to Users Page" />
+      <div className="grid grid-cols-3 gap-3 my-6">
+        {data.map((user) => (
+          <UserCard key={user.id} user={user} />
+        ))}
+      </div>
+    </div>
+  );
 };
 
-export default page;
+export default UsersPage;
