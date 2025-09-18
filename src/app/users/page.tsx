@@ -10,6 +10,7 @@ import React from 'react';
 const UsersPage = () => {
   const { data, loading, error } = useFetch<User[]>('https://jsonplaceholder.typicode.com/users');
 
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -21,7 +22,7 @@ const UsersPage = () => {
   if (error) {
     return <ErrorBox message={error} />;
   }
-  
+
 if (!data || data.length === 0) {
     return <ErrorBox message="No posts found" />;
 }

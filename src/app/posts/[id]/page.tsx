@@ -19,22 +19,26 @@ const Page = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-        if (!res.ok) throw new Error("Post not found");
-        const json: Post = await res.json();
-        setData(json);
-      } catch (err: any) {
-        setError(err.message || "Failed to fetch post");
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchPost = async () => {
+    try {
+      const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+      const json = (await res.json()) as Post;
+      setData(json);
+    } catch (err: unknown) {
+      let message = "An unknown error occurred";
+      if (err instanceof Error) {
+        message = err.message;
       }
-    };
+      console.error("Failed to fetch post:", message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPost();
-  }, [id]);
+  fetchPost();
+}, [id]);
+
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
