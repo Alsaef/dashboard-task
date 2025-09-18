@@ -31,7 +31,7 @@ const Card = ({ title, value, description, color = "blue"}: StatCardProps) => {
                     <p className="text-2xl font-bold text-gray-900">{value}</p>
                     {description && <p className="text-sm text-gray-500">{description}</p>}
 
-                   <Link href={`/posts/${value}`}>View Details</Link>
+                   <Link className={`text-blue-500`} href={`/posts/${value}`}>View Details →</Link>
                 </div>
             </motion.div>
         </div>

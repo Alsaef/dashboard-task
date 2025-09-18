@@ -13,7 +13,9 @@ const page = () => {
     const { data, loading, error } = useFetch<Post[]>('https://jsonplaceholder.typicode.com/posts')
 
     if (loading) {
-        return <Loading />
+        return  <div className="min-h-screen flex items-center justify-center">
+        <Loading></Loading>
+      </div>
     }
 
     if (error) {
