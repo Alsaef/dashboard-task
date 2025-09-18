@@ -3,29 +3,31 @@
 import { Post } from '@/types/tyoe';
 import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
-import { FaPinterest, FaUser } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 import { IoPinSharp } from 'react-icons/io5';
 import Loading from '@/components/Loading';
+import ErrorBox from '@/components/ErrorBox';
+import { useParams } from 'next/navigation';
 
-interface ParamsProps {
-  params: {
-    id: number;
-  };
-}
 
-const Page = ({ params }: ParamsProps) => {
-  const { id } = params;
+
+const Page = () => {
+  const params = useParams<{ id: string }>(); 
+   const id = params.id;
+
   const [data, setData] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-        const json = await res.json();
+        if (!res.ok) throw new Error("Post not found");
+        const json: Post = await res.json();
         setData(json);
-      } catch (error) {
-        console.error("Failed to fetch post:", error);
+      } catch (err: any) {
+        setError(err.message || "Failed to fetch post");
       } finally {
         setLoading(false);
       }
@@ -34,21 +36,15 @@ const Page = ({ params }: ParamsProps) => {
     fetchPost();
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loading></Loading>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <Loading />
+    </div>
+  );
 
-  if (!data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500 text-lg">Post not found</p>
-      </div>
-    );
-  }
+  if (error) return <ErrorBox message={error} />;
+
+  if (!data) return <ErrorBox message="Post not found" />;
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-5 flex items-center justify-center">
@@ -67,8 +63,12 @@ const Page = ({ params }: ParamsProps) => {
         </p>
 
         <div className="flex items-center justify-between border-t pt-4 text-sm text-gray-500">
-          <span className='flex items-center gap-2'><IoPinSharp /> Post ID: {data.id}</span>
-          <span className='flex items-center gap-2'><FaUser/> User ID: {data.userId}</span>
+          <span className="flex items-center gap-2">
+            <IoPinSharp /> Post ID: {data.id}
+          </span>
+          <span className="flex items-center gap-2">
+            <FaUser /> User ID: {data.userId}
+          </span>
         </div>
       </motion.div>
     </div>
