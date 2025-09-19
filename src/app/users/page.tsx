@@ -7,19 +7,24 @@ import Loading from '@/components/Loading';
 import ErrorBox from '@/components/ErrorBox';
 import { motion, AnimatePresence } from 'framer-motion';
 import UserModal from '@/components/UserModal';
+import AnimatedHeader from '@/components/AnimationHeader';
 
 const UsersPage = () => {
   const { data: users, loading, error } = useFetch<User[]>('https://jsonplaceholder.typicode.com/users');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  if (loading) return <Loading />;
+    if (loading) return (
+        <div className="min-h-screen flex items-center justify-center">
+            <Loading />
+        </div>
+    );
   if (error) return <ErrorBox message={error} />;
   if (!users || users.length === 0) return <ErrorBox message="No users found" />;
 
   return (
     <div className="p-5">
-      <h1 className="text-3xl font-bold mb-5">Users</h1>
-      <div className="overflow-x-auto">
+      <AnimatedHeader title="Welcome to User Page" />
+      <div className="overflow-x-auto my-5">
         <table className="min-w-full border border-gray-200">
           <thead>
             <tr className="bg-gray-100">

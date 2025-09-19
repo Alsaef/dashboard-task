@@ -8,7 +8,7 @@ import useFetch from '@/hooks/useFetch';
 import { Post } from '@/types/tyoe';
 
 const PostsPage = () => {
-    const { data, loading, error } = useFetch<Post[]>('https://jsonplaceholder.typicode.com/posts');
+    const { data:posts, loading, error } = useFetch<Post[]>('https://jsonplaceholder.typicode.com/posts');
 
     if (loading) return (
         <div className="min-h-screen flex items-center justify-center">
@@ -17,13 +17,13 @@ const PostsPage = () => {
     );
 
     if (error) return <ErrorBox message={error} />;
-    if (!data || data.length === 0) return <ErrorBox message="No posts found" />;
+    if (!posts || posts.length === 0) return <ErrorBox message="No posts found" />;
 
     return (
         <div>
             <AnimatedHeader title="Welcome to Posts Page" />
             <div className="grid grid-cols-3 gap-3 my-6">
-                {data.map((post) => (
+                {posts.map((post) => (
                     <Card
                         key={post.id}
                         title={post.title}
